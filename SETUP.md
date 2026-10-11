@@ -50,7 +50,7 @@ Your current content is already in the package: the stations, broadcasts (includ
 
 ## Part 2 — Fill in config.js
 
-Open `config.js` in any text editor (Notepad or TextEdit is fine). Replace the two placeholders with the values you copied, keeping the quote marks:
+Open `public/config.js` in any text editor (Notepad or TextEdit is fine). Replace the two placeholders with the values you copied, keeping the quote marks:
 
 ```js
 window.DEADAIR_CONFIG = {

@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Ping the database
         run: |
-          URL=$(grep -oP 'supabaseUrl:\s*"\K[^"]+' config.js)
-          KEY=$(grep -oP 'supabaseAnonKey:\s*"\K[^"]+' config.js)
+          URL=$(grep -oP 'supabaseUrl:\s*"\K[^"]+' public/config.js)
+          KEY=$(grep -oP 'supabaseAnonKey:\s*"\K[^"]+' public/config.js)
           curl -fsS "$URL/rest/v1/entries?select=id&area=eq.air&limit=1" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" > /dev/null
           echo "Transmitter is warm."
