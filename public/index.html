@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ece6ef'/%3E%3Cpath d='M16 7 9 29h14L16 7ZM12.5 19h7M11 24h10' stroke='%236f5878' stroke-width='2.2' fill='none'/%3E%3Cpath d='M11 6a7 7 0 0 0 0 9M21 6a7 7 0 0 1 0 9' stroke='%236f5878' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap">
 <style>
 /* Layout: 2004 small-town radio site. Masthead, tab nav, bulletin strip, then views (home / station room / board / crew / archive) on lavender paper. Dark receiver-scan intro first. Control Room = a tidier back office in the same palette. */
 :root {
@@ -35,10 +35,10 @@
   --t-slate: #646a82;
   --t-dusk: #a8829f;
 
-  --f-display: Georgia, "Times New Roman", serif;
+  --f-display: "IM Fell English", Georgia, "Times New Roman", serif;
   --f-body: Verdana, Geneva, Tahoma, sans-serif;
   --f-brand: "Arial Black", "Arial Bold", Arial, Helvetica, sans-serif;
-  --f-mono: "Courier Prime", "Courier New", Courier, ui-monospace, monospace;
+  --f-mono: "Special Elite", "Courier Prime", "Courier New", Courier, ui-monospace, monospace;
   --f-hand: "Segoe Print", "Bradley Hand", "Comic Sans MS", "Marker Felt", cursive;
 }
 * { box-sizing: border-box; }
@@ -90,7 +90,7 @@ h1, h2, h3 { text-wrap: balance; }
 
 .hero { display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center; padding: 44px 0 40px; }
 .eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: .25em; text-transform: uppercase; margin: 0 0 14px; }
-.hero h1 { font-family: var(--f-display); font-weight: normal; font-size: clamp(34px, 5.4vw, 48px); line-height: 1.1; margin: 0 0 18px; white-space: pre-line; }
+.hero h1 { font-family: var(--f-display); font-weight: normal; font-size: clamp(40px, 6vw, 56px); line-height: 1.05; margin: 0 0 18px; white-space: pre-line; }
 .hero p { font-size: 15px; max-width: 34ch; margin: 0 0 14px; }
 .btn { display: inline-block; background: var(--paper); color: var(--ink); text-decoration: none; border: 1px solid var(--frame); box-shadow: 2px 2px 0 var(--frame); font-family: var(--f-mono); font-weight: bold; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; }
 .btn:hover { background: var(--paper-2); }
@@ -417,6 +417,41 @@ dialog.dlg::backdrop { background: rgba(27,23,34,.55); }
   .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .actions .a.del { margin-left: 0; }
 }
+/* ---------- personality: ticker, stamps, stickers, badges, bevels ---------- */
+.bulletin { align-items: baseline; }
+.ticker { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent); }
+.ticker span { display: inline-block; padding-left: 100%; animation: tick var(--dur, 26s) linear infinite; }
+.ticker:hover span, .ticker:focus-within span { animation-play-state: paused; }
+@keyframes tick { to { transform: translateX(-100%); } }
+.stamp { display: inline-block; font-family: var(--f-mono); text-transform: uppercase; letter-spacing: .1em; font-size: 11px; line-height: 1.3; color: var(--mauve); border: 3px double currentColor; border-radius: 3px; padding: 2px 8px; transform: rotate(-4deg); opacity: .9; white-space: nowrap; }
+.st-meta .stamp { transform: rotate(3deg); }
+.sec-head .stamp { font-size: 10px; letter-spacing: .1em; }
+.newsticker { display: inline-block; background: var(--pink); color: var(--frame); border: 1px solid var(--frame); box-shadow: 1px 1px 0 var(--frame); font-family: var(--f-body); font-weight: bold; font-size: 10px; letter-spacing: .04em; padding: 0 5px; transform: rotate(-7deg); margin-left: 4px; vertical-align: 1px; }
+.btn { background: #e7ddeb; border: 2px solid; border-color: #fbf8fc var(--frame) var(--frame) #fbf8fc; box-shadow: 1px 1px 0 var(--frame); }
+.btn:hover { background: #dccfe2; }
+.btn:active { border-color: var(--frame) #fbf8fc #fbf8fc var(--frame); box-shadow: none; transform: translate(1px, 1px); }
+.btn.dark { background: var(--frame); border-color: #75687f #0f0c14 #0f0c14 #75687f; }
+.filters button { border: 2px solid; border-color: #fbf8fc var(--frame) var(--frame) #fbf8fc; background: #e7ddeb; }
+.filters button[aria-pressed="true"] { border-color: #0f0c14 #75687f #75687f #0f0c14; }
+.sec-head h2::before { content: "\2726"; color: var(--mauve); font-size: .7em; vertical-align: .15em; margin-right: .35em; }
+.weather .sec-head h2::before { content: ""; }
+.webring { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--f-mono); font-size: 12px; margin: 0 0 14px; }
+.webring b { font-weight: normal; border-bottom: 1px dotted var(--mauve); }
+.webring button { background: none; border: 0; padding: 4px 0; font-family: var(--f-mono); font-size: 12px; color: var(--mauve); text-decoration: underline; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 18px; }
+.b88 { width: 88px; height: 31px; display: inline-flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border: 1px solid var(--frame); font-family: Verdana, Geneva, sans-serif; line-height: 1.05; overflow: hidden; box-shadow: inset 1px 1px 0 rgba(255,255,255,.35), inset -1px -1px 0 rgba(0,0,0,.35); }
+.b88 i { font-style: normal; font-size: 7px; letter-spacing: .04em; text-transform: uppercase; }
+.b88 b { font-size: 9.5px; letter-spacing: .03em; }
+.bA { background: var(--frame); color: var(--pink); }
+.bB { background: repeating-linear-gradient(0deg, #cfc4d6 0 2px, #bfb2c8 2px 4px); color: var(--frame); }
+.bC { background: var(--lilac); color: var(--frame); }
+.bD { background: var(--paper); color: var(--mauve); }
+.bE { background: linear-gradient(180deg, #8d6f8f, #5c4766); color: #f4e9f6; }
+@media (prefers-reduced-motion: reduce) {
+  .ticker { white-space: normal; -webkit-mask-image: none; mask-image: none; }
+  .ticker span { padding-left: 0; animation: none; }
+}
+
 /* ---------- phones: bigger, darker small print (same look) ---------- */
 @media (max-width: 620px) {
   body { font-size: 15px; -webkit-text-size-adjust: 100%; }
@@ -426,7 +461,7 @@ dialog.dlg::backdrop { background: rgba(27,23,34,.55); }
   .brand .since { font-size: 16px; }
   .onair small { font-size: 11px; }
   .nav a { font-size: 14px; padding: 13px 6px; }
-  .bulletin { font-size: 13px; }
+  .bulletin { font-size: 13px; align-items: stretch; }
   .hero p { font-size: 16px; }
   .btn { font-size: 12.5px; padding: 11px 15px; }
   .sec-head span, .sec-head a { font-size: 11.5px; }
@@ -524,7 +559,7 @@ dialog.dlg::backdrop { background: rgba(27,23,34,.55); }
     <a href="#archive"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="1.5" y="3.5" width="13" height="9"/><circle cx="5.5" cy="8" r="1.6"/><circle cx="10.5" cy="8" r="1.6"/><path d="M5 12.5 6 10.5h4l1 2"/></svg>Archive</a>
   </nav>
 
-  <div class="bulletin"><b>STATION BULLETIN</b><span id="bulletin">Tower 3 is operational again. Please disregard anything Tower 3 says about Tower 2.</span></div>
+  <div class="bulletin"><b>STATION BULLETIN</b><div class="ticker"><span id="bulletin">Tower 3 is operational again. Please disregard anything Tower 3 says about Tower 2.</span></div></div>
 
   <!-- HOME -->
   <div id="view-home" class="view">
@@ -586,7 +621,7 @@ Unusual reception.</h1>
       </div>
       <aside class="side">
         <section class="weather" id="weather" aria-live="polite">
-          <div class="sec-head"><h2>Local weather</h2><span>Advisory</span></div>
+          <div class="sec-head"><h2>Local weather</h2><span class="stamp">Advisory</span></div>
           <div id="wxBox"><p class="loading">Checking the sky…</p></div>
         </section>
         <section class="notices" id="notices">
@@ -623,6 +658,14 @@ Unusual reception.</h1>
         <button type="button" class="linkish" id="mapLink">County map</button>
         <a href="#control" class="cr-link">Control Room</a>
       </p>
+      <p class="webring"><button type="button" data-ring="-1">◄ prev</button><b>Tri-County Web Ring</b><button type="button" data-ring="0">random</button><button type="button" data-ring="1">next ►</button></p>
+      <div class="badges" aria-label="Badges">
+        <span class="b88 bA"><i>best viewed at</i><b>109.0 FM</b></span>
+        <span class="b88 bB"><i>powered by</i><b>STATIC</b></span>
+        <span class="b88 bC"><i>member</i><b>TRI-COUNTY RING</b></span>
+        <span class="b88 bD"><i>no towers were</i><b>HARMED</b></span>
+        <span class="b88 bE"><i>made on a</i><b>TUESDAY*</b></span>
+      </div>
       <h4 style="margin-bottom:6px">MUSIC &amp; RIGHTS NOTICE</h4>
       <p class="rights">Dead Air Broadcasting Cooperative is an independent, noncommercial passion project for friends and fans of the weird and good music. The site creator does not own or claim ownership of any featured third-party music, recordings, lyrics, or associated artwork. All rights remain with their respective artists, songwriters, labels, publishers, and other rights holders. No third-party music is claimed as the creator’s own. This site generates no revenue or profit for its creator. Music is shared through links to third-party streaming services and any authorized embeds, subject to those services’ terms. No affiliation, endorsement, or sponsorship by any artist, rights holder, or streaming service is implied. This notice does not grant permission to copy, download, redistribute, or otherwise use copyrighted material.</p>
     </div>
@@ -732,6 +775,12 @@ function listenHTML(b, embed = false) {
 const bcLabel = (b, st) => [st && (st.artShort || st.name), b.number].filter(Boolean).join(" / ");
 
 /* ---------- home ---------- */
+function newestId(C) {
+  let best = null;
+  for (const b of C.broadcasts) if (spotifyId(b.spotify) && (!best || (b.publishedAt || 0) > (best.publishedAt || 0))) best = b;
+  return best && best.id;
+}
+const NEW = `<span class="newsticker" aria-label="new">NEW!</span>`;
 function renderHome(C) {
   const t = C.text || {};
   if (C.text) {
@@ -755,7 +804,7 @@ function renderHome(C) {
     return `<article class="station">
       <a class="art-link" href="#station-${esc(st.id)}" aria-label="Open the ${esc(st.name)} station page">${coverHTML(st, "m")}</a>
       <div>
-        <div class="st-meta"><span>${esc(st.freq)}</span>${st.signal ? `<span class="sig">${esc(st.signal)}</span>` : ""}</div>
+        <div class="st-meta"><span>${esc(st.freq)}</span>${st.signal ? `<span class="stamp">${esc(st.signal)}</span>` : ""}</div>
         <h3><a href="#station-${esc(st.id)}">${esc(st.name)}</a></h3>
         ${st.tagline ? `<p class="tagline">${esc(st.tagline)}</p>` : ""}
         ${st.desc ? `<p class="desc">${esc(st.desc)}</p>` : ""}
@@ -768,7 +817,7 @@ function renderHome(C) {
   const tapes = C.broadcasts.slice(0, 5);
   $("tapeList").innerHTML = tapes.length ? tapes.map(b => {
     const st = stationOf(C, b.station);
-    return `<li><button type="button" data-bc="${esc(b.id)}"><span class="id">${esc(bcLabel(b, st))}</span><span class="ti">${esc(b.title)}</span><span class="ar">${spotifyId(b.spotify) ? "↗" : "Awaiting connection"}</span></button></li>`;
+    return `<li><button type="button" data-bc="${esc(b.id)}"><span class="id">${esc(bcLabel(b, st))}${b.id === newestId(C) ? " " + NEW : ""}</span><span class="ti">${esc(b.title)}</span><span class="ar">${spotifyId(b.spotify) ? "↗" : "Awaiting connection"}</span></button></li>`;
   }).join("") : `<li class="loading">${esc((C.text && C.text.archiveEmpty) || "No tapes on this shelf yet.")}</li>`;
 
   const tn = C.notices.filter(n => n.board !== "community");
@@ -817,9 +866,12 @@ $("wxBox").addEventListener("click", e => {
 let bTimer = null, bList = [], bIdx = 0;
 function startBulletins(list) {
   if (JSON.stringify(list) === JSON.stringify(bList)) return;
-  bList = list.filter(Boolean); bIdx = 0; clearInterval(bTimer);
-  if (bList.length) $("bulletin").textContent = bList[0];
-  if (bList.length > 1) bTimer = setInterval(() => { bIdx = (bIdx + 1) % bList.length; $("bulletin").textContent = bList[bIdx]; }, 9000);
+  bList = list.filter(Boolean);
+  if (!bList.length) return;
+  const text = bList.join("   \u2726   ");
+  const el = $("bulletin");
+  el.textContent = text;
+  el.style.setProperty("--dur", Math.max(16, Math.round(text.length * 0.28)) + "s");
 }
 
 /* ---------- station room ---------- */
@@ -847,7 +899,7 @@ function renderBoard(C) {
   const t = C.text || {};
   const list = C.notices.filter(n => n.board === "community");
   $("view-board").innerHTML = `<a class="back" href="#home">← Back to the listening area</a>
-    <div class="view-head"><h1>Community Board</h1><p>${esc(t.boardIntro || "")}</p><p class="small">${esc(t.boardLabel || "Fictional community notices.")}</p></div>
+    <div class="view-head"><h1>Community Board</h1><p>${esc(t.boardIntro || "")}</p><p style="margin-top:10px"><span class="stamp">${esc(t.boardLabel || "Fictional community notices.")}</span></p></div>
     ${list.length ? `<div class="board">${list.map(n => `<button type="button" class="notice" data-notice="${esc(n.id)}"><span class="pin" aria-hidden="true"></span><span class="ts">${esc(n.dateLabel || "Posted")}</span><h3>${esc(n.title)}</h3><p>${esc(n.body)}</p></button>`).join("")}</div>` : `<p class="empty-shelf">The board is empty. Someone took all the thumbtacks.</p>`}`;
 }
 
@@ -886,7 +938,7 @@ function renderArchive(C) {
       <button type="button" data-filter="all" aria-pressed="${archFilter === "all"}">All broadcasts</button>
       ${C.stations.map(s => `<button type="button" data-filter="${esc(s.id)}" aria-pressed="${archFilter === s.id}">${esc(s.artShort || s.name)}</button>`).join("")}
     </div>
-    ${list.length ? `<div class="shelf">${list.map(b => { const st = stationOf(C, b.station); return `<button type="button" class="tape" data-bc="${esc(b.id)}">${bcArt(b, st)}<span class="meta">${esc(bcLabel(b, st))}</span><b>${esc(b.title)}</b>${b.desc ? `<span class="d">${esc(b.desc)}</span>` : ""}${spotifyId(b.spotify) ? "" : `<span class="aw">Awaiting connection</span>`}</button>`; }).join("")}</div>`
+    ${list.length ? `<div class="shelf">${list.map(b => { const st = stationOf(C, b.station); return `<button type="button" class="tape" data-bc="${esc(b.id)}">${bcArt(b, st)}<span class="meta">${esc(bcLabel(b, st))}${b.id === newestId(C) ? " " + NEW : ""}</span><b>${esc(b.title)}</b>${b.desc ? `<span class="d">${esc(b.desc)}</span>` : ""}${spotifyId(b.spotify) ? "" : `<span class="aw">Awaiting connection</span>`}</button>`; }).join("")}</div>`
       : `<p class="empty-shelf">${esc(t.archiveEmpty || "No tapes on this shelf yet. Check back when the transmitter feels talkative.")}</p>`}`;
 }
 $("view-archive").addEventListener("click", e => {
@@ -934,6 +986,17 @@ $("counter").addEventListener("click", () => openDialog("Listener services", `<h
 $("special").addEventListener("click", () => {
   const sp = (T().sponsorSpecials || []).filter(Boolean); if (!sp.length) return;
   const p = $("specialText"); p.hidden = false; p.textContent = sp[Math.floor(Math.random() * sp.length)];
+});
+
+/* ---------- web ring ---------- */
+document.querySelector(".webring").addEventListener("click", e => {
+  const b = e.target.closest("[data-ring]"); if (!b) return;
+  const stops = ["home", ...content().stations.map(s => "station-" + s.id), "board", "crew", "archive"];
+  const cur = Math.max(0, stops.indexOf((location.hash || "#home").slice(1)));
+  const dir = +b.dataset.ring;
+  let next = dir === 0 ? Math.floor(Math.random() * stops.length) : (cur + dir + stops.length) % stops.length;
+  if (dir === 0 && next === cur) next = (cur + 1) % stops.length;
+  location.hash = "#" + stops[next];
 });
 
 /* ---------- listener counter ---------- */
