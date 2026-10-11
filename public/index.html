@@ -1702,7 +1702,8 @@ function makeAssets(sb) {
 function renderSignIn(root) {
   root.innerHTML = `<div class="locked" style="text-align:left">
     <h2 style="text-align:center">Control Room sign-in</h2>
-    <p>For the station’s owner. Enter your email and we’ll send a sign-in email. Use the link in it, or type the code it contains below.</p>
+    <p>For the station’s owner. Enter your email and we’ll send you a sign-in link. Open the link <b>in this same browser</b>.</p>
+    ${S.signInNote ? `<p class="savest bad" role="alert">${esc(S.signInNote)}</p>` : ""}
     <form id="siForm" class="form" style="grid-template-columns:1fr" novalidate>
       <div class="fld"><label for="siEmail">Email address</label><input type="text" id="siEmail" inputmode="email" autocomplete="email" value="${esc(S.signInEmail || "")}"></div>
       <div class="btnrow"><button type="submit" class="btn dark" id="siSend">Send sign-in email</button><a class="btn" href="#home">Back to the site</a></div>
@@ -1728,7 +1729,7 @@ function renderSignIn(root) {
       return;
     }
     S.signInSent = true; $("siCodeForm").hidden = false;
-    st("Sign-in email sent. Open the link in this browser, or type the code here.", "good");
+    S.signInNote = ""; st("Sign-in email sent. Open the link in this same browser. If your email shows a code, you can type it below instead.", "good");
     $("siCode").focus();
   });
   $("siCodeForm").addEventListener("submit", async e => {
@@ -1774,7 +1775,7 @@ async function refreshOwner() {
    ============================================================ */
 async function boot() {
   const h = (location.hash || "").slice(1);
-  const back = new URLSearchParams(location.search).has("code");
+  const qs = new URLSearchParams(location.search), back = qs.has("code") || qs.has("error_description");
   if ((!h || h === "home") && !back) openReceiver();
   route();
   if (!CFG.supabaseUrl || !CFG.supabaseAnonKey || /YOUR-/.test(CFG.supabaseUrl + CFG.supabaseAnonKey) || !window.supabase) {
@@ -1794,7 +1795,17 @@ async function boot() {
     }, () => { if (first) { first = false; airErr = true; airDone(); } });
   }
   sb.auth.onAuthStateChange(ev => { if (ev === "SIGNED_IN" || ev === "SIGNED_OUT" || ev === "INITIAL_SESSION") setTimeout(refreshOwner, 0); });
-  if (back) history.replaceState(null, "", location.pathname + location.hash);
+  if (back) {
+    /* Let the sign-in library read the code in the address first, then tidy the address bar. */
+    sb.auth.getSession().then(({ data }) => {
+      const params = new URLSearchParams(location.search);
+      if (!(data && data.session)) S.signInNote = params.get("error_description")
+        ? "That sign-in link has expired or was already used. Send a new one below."
+        : "That sign-in link didn’t work in this browser. Links only work in the same browser where you asked for them, so send a new one from here and open it in this browser.";
+      history.replaceState(null, "", location.pathname + location.hash);
+      if (S.signInNote) { try { localStorage.removeItem("dabc-go-control"); } catch (e) {} location.hash = "#control"; route(); }
+    });
+  }
   let lastFocus = Date.now();
   window.addEventListener("focus", () => { if (Date.now() - lastFocus > 20000) { lastFocus = Date.now(); S.db.refreshAll(); } });
 }
