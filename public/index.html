@@ -742,8 +742,14 @@ function content() {
 }
 const stationOf = (C, id) => C.stations.find(s => s.id === id);
 function featuredFor(C, stationId, explicitId) {
+  /* 1. the playlist picked for this station, 2. the most recently published one marked "feature", 3. the first in order */
   const list = C.broadcasts.filter(b => b.station === stationId);
-  return list.find(b => b.id === explicitId) || list.find(b => b.featured) || list[0] || null;
+  const st = C.stations.find(s => s.id === stationId) || {};
+  const pick = explicitId || st.featuredId;
+  const chosen = pick && list.find(b => b.id === pick);
+  if (chosen) return chosen;
+  const flagged = list.filter(b => b.featured).sort((a, b) => (b.publishedAt || b.updatedAt || 0) - (a.publishedAt || a.updatedAt || 0));
+  return flagged[0] || list[0] || null;
 }
 
 /* ---------- artwork ---------- */
@@ -1169,6 +1175,7 @@ const SCHEMA = {
       { k: "notice", label: "Short station notice", type: "textarea", rows: 2, full: true },
       { k: "signal", label: "Signal note", hint: "A few words, like Signal stable" },
       { k: "buttonLabel", label: "Button label", hint: "For example Tune in" },
+      { k: "featuredId", label: "Featured broadcast", type: "bcpick", full: true },
       { k: "pendingNote", label: "Message while no playlist is connected", full: true },
       { k: "cover", label: "Station artwork", type: "image", aspect: "1 / 1", full: true },
       { h: "Artwork used when no image is uploaded" },
@@ -1188,7 +1195,7 @@ const SCHEMA = {
       { k: "cover", label: "Cover artwork", type: "image", aspect: "1 / 1", full: true },
       { k: "note", label: "Curator note", type: "textarea", rows: 2, full: true, hint: "Optional" },
       { k: "date", label: "Display date", hint: "Optional. Shown exactly as typed, for example Oct 2026" },
-      { k: "featured", label: "Feature this broadcast on its station page", type: "check" }
+      { k: "featured", label: "Feature this broadcast on its station page (the most recently published one wins, unless the station has a specific pick)", type: "check", full: true }
     ] },
   staff: { label: "Staff", one: "staff entry", title: d => d.name || "Unnamed staff", sub: d => d.role || "",
     fields: [
@@ -1407,7 +1414,7 @@ function fieldHTML(f, d) {
     case "pairs": return `<div class="${cls}"><label for="${id}">${esc(f.label)}</label>${hint}<textarea id="${id}" data-k="${f.k}" rows="${Math.max(3, (v || []).length + 1)}" ${desc}>${esc((v || []).map(p => p.label + ": " + p.value).join("\n"))}</textarea>${err}</div>`;
     case "select": return `<div class="${cls}"><label for="${id}">${esc(f.label)}</label>${hint}<select id="${id}" data-k="${f.k}">${f.options.map(([val, l]) => `<option value="${esc(val)}" ${v === val ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>${err}</div>`;
     case "station": { const sts = deskList("stations"); return `<div class="${cls}"><label for="${id}">${esc(f.label)}${req}</label>${hint}<select id="${id}" data-k="${f.k}"><option value="">Choose a station…</option>${sts.map(s => `<option value="${esc(s.id)}" ${v === s.id ? "selected" : ""}>${esc(s.name)}${airHas("stations", s.id) ? "" : " (draft)"}</option>`).join("")}</select>${err}</div>`; }
-    case "swcpick": { const bs = deskList("broadcasts").filter(b => b.station === "swc"); return `<div class="${cls}"><label for="${id}">${esc(f.label)}</label><span class="hint">Only published playlists appear to visitors.</span><select id="${id}" data-k="${f.k}"><option value="">Automatic (first featured, otherwise first in order)</option>${bs.map(b => `<option value="${esc(b.id)}" ${v === b.id ? "selected" : ""}>${esc(b.title)}${airHas("broadcasts", b.id) ? "" : " (draft)"}</option>`).join("")}</select>${err}</div>`; }
+    case "swcpick": case "bcpick": { const sid = f.type === "swcpick" ? "swc" : CR.editing.id; const bs = deskList("broadcasts").filter(b => b.station === sid); return `<div class="${cls}"><label for="${id}">${esc(f.label)}</label><span class="hint">${bs.length ? "Pick the playlist to show first on this station. Automatic uses the most recently published one marked “Feature this”, otherwise the first in order. Only published playlists appear to visitors." : "No broadcasts on this station yet. Add one under Broadcasts first."}</span><select id="${id}" data-k="${f.k}"><option value="">Automatic</option>${bs.map(b => `<option value="${esc(b.id)}" ${v === b.id ? "selected" : ""}>${esc(b.title)}${b.number ? " (" + esc(b.number) + ")" : ""}${airHas("broadcasts", b.id) ? "" : " (draft)"}</option>`).join("")}</select>${err}</div>`; }
     case "check": return `<div class="${cls} check"><input type="checkbox" id="${id}" data-k="${f.k}" ${v ? "checked" : ""}><label for="${id}">${esc(f.label)}</label></div>`;
     case "image": return imageFieldHTML(f, v);
     default: return `<div class="${cls}"><label for="${id}">${esc(f.label)}${req}</label>${hint}<input type="text" id="${id}" data-k="${f.k}" value="${esc(v)}" ${f.type === "spotify" ? 'inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://open.spotify.com/playlist/…"' : ""} ${desc}>${err}</div>`;
